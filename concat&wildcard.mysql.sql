@@ -125,6 +125,56 @@ where hourly_pay like "%5"; # It returns every value ends with 5
 
 select * from employees;
 
+# ORDER BY
+
+
+select * from employees
+order by first_name;
+
+select * from employees
+order by last_name;
+
+select * from employees
+order by hourly_pay;
+
+select * from employees
+order by hourly_pay,first_name; 
+
+select * from employees
+order by first_name desc;
+
+select * from employees
+order by hire_date desc;
+
+select * from employees
+order by first_name desc,hourly_pay asc; # hourly_pay asc applies only when first_names are same
+
+# LIMIT CLAUSE
+
+select * from employees
+limit 3;
+
+select * from employees
+order by last_name desc
+limit 2;
+
+# OFFSET
+
+select * from employees
+limit 2,1;	# HERE 2 IS AN OFFSET(NO OF ROWS TO SKIP) AND 1 IS NUMBER OF ROWS TO RETURN 
+
+select * from employees
+order by hourly_pay
+limit 2,2;
+
+select * from employees
+order by hourly_pay desc
+limit 3,1;
+
+
+
+
+
 
 
 
