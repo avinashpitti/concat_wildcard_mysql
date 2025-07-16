@@ -96,6 +96,37 @@ where job in ("asst.manager","cook") and hourly_pay>15;
 
 select * from employees;
 
+# wild card characters are 1)% percentage, 2)_underscore
+# we have 	like	 keyword to search a specific pattern usually with 		where 
+
+select * from employees
+where last_name like "%s"; # It considers last character.write character after % 
+
+select * from employees
+where first_name like"p%"; # It considers first character.write character before %
+
+#If you have to search by third character
+
+select * from employees
+where first_name like "__t%"; # give two underscores first then character
+
+select * from employees
+where first_name like "__g%__e" and last_name like "%s";
+
+select * from employees
+where hire_date like "____-__-04";
+
+select * from employees
+where hourly_pay like "1%"; # It returns every value starts with 1
+
+select * from employees
+where hourly_pay like "%5"; # It returns every value ends with 5
+
+
+select * from employees;
+
+
+
 
 
 
