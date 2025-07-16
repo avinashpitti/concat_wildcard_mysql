@@ -172,6 +172,35 @@ order by hourly_pay desc
 limit 3,1;
 
 
+select * from employees;
+
+select * from customers;
+
+#union : selected columns should be equal
+
+select  first_name,last_name from employees
+union	# UNION DOESN'T CONSIDER DUPLICATE VALUES. IF NEEDED USE union all
+select first_name,last_name from customers;
+
+select employee_id,first_name,last_name from employees # here column names are employee_id,first_name,last_name
+union
+select customer_id, first_name,last_name from customers;
+
+# Key Rule of UNION:
+# The column names (headings) in the final result are always taken from the first SELECT statement.
+
+select customer_id, first_name,last_name from customers # here column names are customer_id,first_name,last_name
+union
+select employee_id,first_name,last_name from employees;
+
+# IF YOU WANT YOU CAN CHANGE THE COLUMN NAME
+
+select employee_id as id,first_name,last_name from employees # HERE COLUMN NAMES ARE id,first_name,last_name
+union
+select customer_id, first_name,last_name from customers;
+
+
+
 
 
 
