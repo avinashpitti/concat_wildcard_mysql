@@ -199,6 +199,107 @@ select employee_id as id,first_name,last_name from employees # HERE COLUMN NAMES
 union
 select customer_id, first_name,last_name from customers;
 
+select * from customers;
+
+alter table customers
+add referral_id int;
+
+update customers
+set referral_id=1
+where customer_id=2;
+
+update customers
+set referral_id=2
+where customer_id=3;
+
+update customers
+set referral_id=2
+where customer_id=4;
+
+select * from customers;
+
+
+# SELF JOIN: A SELF JOIN in MySQL is a regular join where a table is joined with itself.
+
+select *
+from customers as A
+inner join customers as B
+on A.referral_id= B.customer_id;
+
+select A.customer_id, A.first_name, A.last_name,
+concat(B.first_name," ",B.last_name)as "referred_by"
+from customers as A
+inner join customers as B	 
+on A.referral_id= B.customer_id;
+
+
+select A.customer_id, A.first_name, A.last_name,
+concat(B.first_name," ",B.last_name)as "referred_by"
+from customers as A
+left join customers as B	
+on A.referral_id= B.customer_id;
+
+alter table employees
+add column supervisor_id int; # here the word column is optional
+
+set sql_safe_updates=0;
+
+update employees
+set supervisor_id=5
+where employee_id=2;
+
+update employees
+set supervisor_id=5
+where employee_id=3;
+
+update employees
+set supervisor_id=5
+where employee_id=4;
+
+update employees
+set supervisor_id=5
+where employee_id=6;
+
+update employees
+set supervisor_id=1
+where employee_id=5;
+
+select * from employees;
+
+select a.first_name,a.last_name,	# Remaining columns are unncessary that's why we chose only necessary.
+	concat(b.first_name," ",b.last_name) as "reports to"
+    # we concat here because it looks good a combined name.
+    from employees as a
+    inner join employees as b
+    on a.supervisor_id= b.employee_id;
+    
+    select a.first_name,a.last_name,	# Remaining columns are unncessary that's why we chose only necessary.
+	concat(b.first_name," ",b.last_name) as "reports to"
+    # we concat here because it looks good a combined name.
+    from employees as a
+    left join employees as b
+    on a.supervisor_id= b.employee_id;
+
+
+# views in mysql
+#A View in MySQL is a virtual table based on the result of a SELECT query.
+#It doesn't store data itself but shows data from one or more tables.
+
+select * from employees;	# There are times where we need to work with few rows only then views help.
+
+create view employee_attendance as
+select first_name,last_name
+from employees;
+
+select * from employee_attendance;
+
+select * from employee_attendance
+order by last_name asc;
+
+select * from employee_attendance
+order by last_name desc;
+
+drop view employee_attendance;
 
 
 
