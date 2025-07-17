@@ -301,6 +301,45 @@ order by last_name desc;
 
 drop view employee_attendance;
 
+select * from customers;
+
+    alter table customers
+    add column email varchar(50);
+    
+    update customers
+    set email="FFish@gmail.com"
+    where customer_id=1;
+    
+	update customers
+    set email="Llobster@gmail.com"
+    where customer_id=2;
+    
+	update customers
+    set email="Bbass@gmail.com"
+    where customer_id=3;
+    
+	update customers
+    set email="Ppuff@gmail.com"
+    where customer_id=4;
+
+select * from customers;
+
+create view customer_emails as
+select email
+from customers;
+
+select * from customer_emails;
+
+insert into customers
+values(5,"pearl","krabs",null,"PKrabs@gmail.com");
+
+select * from  customers;
+
+select * from customer_emails; # view also changes automatically if we add any rows into table 
+
+
+
+
 
 
 
