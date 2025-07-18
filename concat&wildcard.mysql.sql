@@ -657,6 +657,47 @@ delimiter ;
 
 call find_customer("Larry","Lobster");
 
+# triggers:[BEFORE | AFTER] [INSERT | UPDATE | DELETE] OLD NEW are trigger components
+
+alter table employees
+add column salary decimal(10,2) after hourly_pay;
+
+set sql_safe_updates=0;
+update employees
+set salary= hourly_pay * 2080;
+
+select * from employees;
+
+create trigger before_hourly_pay_update
+before update on employees
+for each row
+set new.salary=(new.hourly_pay*2080); 
+
+# what triggers does is if you change the hourly_pay it automatically changes salary too.
+
+show triggers;
+
+update employees
+set hourly_pay=50
+where employee_id=1;
+
+update employees
+set hourly_pay=hourly_pay+1;
+
+select * from employees;
+
+create trigger before_hourly_pay_insert
+before insert on employees
+for each row
+set new.salary=(new.hourly_pay*2080);
+
+select * from employees;
+
+
+
+
+
+
 
 
 
