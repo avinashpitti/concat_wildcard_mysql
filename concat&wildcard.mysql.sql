@@ -337,6 +337,197 @@ select * from  customers;
 
 select * from customer_emails; # view also changes automatically if we add any rows into table 
 
+# Index: It is used for searching. It allows duplicates
+# create index: duplicates are allowed
+#create unique index: duplicates are not allowed
+
+select * from customers;
+
+create index last_name_idx
+on customers(last_name);
+
+show indexes from customers;
+
+# Multi column index
+
+create index last_name_first_name_idx
+on customers(last_name,first_name);
+
+show indexes from customers;
+
+alter table customers
+drop index last_name_idx; # last_name_first_name_idx does both so we no need it.
+
+#subquery: A query within another query
+# It runs the inner query first, then uses its result in the outer query.
+
+select * from employees;
+
+select first_name,last_name,hourly_pay,
+(select avg(hourly_pay) from employees) as avg_pay
+from employees;
+
+select first_name,last_name,hourly_pay,
+(select max(hourly_pay) from employees) as max_pay  
+from employees;
+
+select hourly_pay from employees
+order by hourly_pay desc
+limit 1,1;	# It prints the second highest value. here first 1 represents offset second 1 represents limit
+
+select distinct hourly_pay from employees
+order by hourly_pay desc
+limit 1 offset 1;
+
+select max(hourly_pay) as second_max
+from employees
+where hourly_pay < (
+select max(hourly_pay)
+from employees
+);
+
+select min(hourly_pay) as second_min
+from employees
+where hourly_pay > (
+select min(hourly_pay)
+from employees
+);
+
+SELECT MIN(hourly_pay) AS third_smallest
+FROM employees
+WHERE hourly_pay > (
+  SELECT MIN(hourly_pay)
+  FROM employees
+  WHERE hourly_pay > (
+    SELECT MIN(hourly_pay)
+    FROM employees
+  )
+);
+
+select first_name,last_name,hourly_pay	#first read and do subquery then it feels easy.
+from employees	
+where hourly_pay > (select avg(hourly_pay)  from employees);
+
+select * from employees;
+
+select * from customers;
+
+select first_name,last_name
+from customers
+where customer_id in
+(select distinct customer_id
+from transactions
+where customer_id is not null);
+
+select * from transactions;
+
+# Group by: Aggregate all rows by a specified column often used with aggregate functions like sum(),max(),avg(),count()
+
+insert into transactions(amount,customer_id)
+values
+(2.49,4);
+
+insert into transactions(amount)
+values
+(5.48);
+
+select * from transactions;
+
+alter table transactions
+add column order_date date;
+
+update transactions
+set order_date="2023-01-01"
+where transaction_id =1000;
+
+update transactions
+set order_date="2023-01-01"
+where transaction_id =1001;
+
+update transactions
+set order_date="2023-01-02"
+where transaction_id =1002;
+
+update transactions
+set order_date="2023-01-02"
+where transaction_id =1003;
+
+update transactions
+set order_date="2023-01-03"
+where transaction_id =1004;
+
+update transactions
+set order_date="2023-01-03"
+where transaction_id =1005;
+
+update transactions
+set order_date="2023-01-03"
+where transaction_id =1006;
+
+select * from transactions;
+
+#group by
+
+select sum(amount) ,order_date
+from transactions
+group by order_date;
+
+select count(amount) ,order_date
+from transactions
+group by order_date;
+
+select max(amount) ,order_date
+from transactions
+group by order_date;
+
+select sum(amount), customer_id
+from transactions
+group by customer_id;
+
+select count(amount), customer_id
+from transactions
+group by customer_id # we can't use where clause with group by
+having count(amount) > 1 and customer_id is not null; # use having with group by clause
+
+select * from transactions;
+
+# ROLL UP: Extension of the group by clause
+# Produces another row and shows the grand total (super aggregate value)
+
+select sum(amount),order_date
+from transactions
+group by order_date with rollup;
+
+select count(transaction_id) as num_of_orders,order_date
+from transactions
+group by order_date with rollup;
+
+select * from employees;
+
+select sum(hourly_pay) as total_amt_paid_in_onehour,employee_id
+from employees
+group by employee_id with rollup;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
