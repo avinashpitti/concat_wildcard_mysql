@@ -508,7 +508,117 @@ select sum(hourly_pay) as total_amt_paid_in_onehour,employee_id
 from employees
 group by employee_id with rollup;
 
+# on delete set null = when a fk is deleted, replace fk with null
+# on delete cascade  = when a fk is deleted, delete row
 
+CREATE TABLE departments (
+  id INT PRIMARY KEY,
+  name VARCHAR(50)
+);
+
+CREATE TABLE employees_null (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  dept_id INT,
+  FOREIGN KEY (dept_id) REFERENCES departments(id)
+    ON DELETE SET NULL
+);
+
+CREATE TABLE employees_cascade (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  dept_id INT,
+  FOREIGN KEY (dept_id) REFERENCES departments(id)
+    ON DELETE CASCADE
+);
+
+-- Departments
+INSERT INTO departments VALUES (1, 'HR'), (2, 'IT');
+
+-- Employees for SET NULL
+INSERT INTO employees_null VALUES
+  (101, 'Alice', 1),
+  (102, 'Bob', 2);
+
+-- Employees for CASCADE
+INSERT INTO employees_cascade VALUES
+  (201, 'Carol', 1),
+  (202, 'David', 2);
+  
+  select * from departments;
+  
+  select * from employees_null;
+  
+  select * from employees_cascade;
+  
+  delete from departments where id=1;
+  
+  select * from transactions;
+  
+  select * from customers;
+  
+  delete from customers
+  where customer_id=4; # can't delete or update a parent row. A foreign key constraint fails
+  
+# set foreign_key_checks=0; it works
+# set foregin_key_checks=1; to come back into safe mode
+
+set foreign_key_checks=0;
+
+delete from customers
+where customer_id=4; # Now it's deleted.
+
+set foreign_key_checks=1;# Now we are back to safe mode.
+
+select * from transactions;# Now we have transaction_id 1005 with references to customer_id
+
+insert into customers
+values
+(4,"poppy","puff",2,"PPuff@gmail.com");
+
+select * from customers;
+
+alter table transactions
+drop foreign key fk_customer_id;
+
+alter table transactions
+add constraint fk_customer_id
+foreign key(customer_id) references customers(customer_id)
+on delete set null;
+
+delete from customers 
+where customer_id=4;
+
+select * from customers;
+
+select * from transactions;
+
+insert into customers
+values(4,"poppy","puff",2,"PPuff@gmail.com");
+
+select * from customers;
+
+alter table transactions
+drop foreign key fk_customer_id;
+
+alter table transactions
+add constraint fk_customer_id
+foreign key(customer_id) references customers(customer_id)
+on delete cascade;
+
+select * from transactions;
+
+delete from customers
+where customer_id=4;
+
+select * from customers;
+
+
+
+  
+  
+  
+  
 
 
 
